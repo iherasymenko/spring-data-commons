@@ -15,9 +15,6 @@
  */
 package org.springframework.data.domain;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +41,6 @@ import org.springframework.util.StringUtils;
  * @author Thomas Darimont
  * @author Mark Paluch
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sort implements Streamable<org.springframework.data.domain.Sort.Order>, Serializable {
 
 	private static final long serialVersionUID = 5737186511678863905L;
@@ -54,6 +50,27 @@ public class Sort implements Streamable<org.springframework.data.domain.Sort.Ord
 	public static final Direction DEFAULT_DIRECTION = Direction.ASC;
 
 	private final List<Order> orders;
+
+	// MONKEY PATCH START
+
+	public Sort(List<Order> orders) {
+		this.orders = orders;
+	}
+
+	public Sort(Order... orders) {
+		this.orders = Arrays.asList(orders);
+	}
+
+	public Sort(String... sortFields) {
+		this(DEFAULT_DIRECTION, Arrays.asList(sortFields));
+	}
+
+	public Sort(Direction direction, String... sortFields) {
+		this(direction, Arrays.asList(sortFields));
+	}
+
+	// MONKEY PATCH END
+
 
 	/**
 	 * Creates a new {@link Sort} instance.
@@ -379,6 +396,12 @@ public class Sort implements Streamable<org.springframework.data.domain.Sort.Ord
 		private final String property;
 		private final boolean ignoreCase;
 		private final NullHandling nullHandling;
+
+		// MONKEY PATCH START
+		public Order(String property) {
+			this(Direction.ASC, property);
+		}
+		// MONKEY PATCH END
 
 		/**
 		 * Creates a new {@link Order} instance. if order is {@literal null} then order defaults to

@@ -15,6 +15,7 @@
  */
 package org.springframework.data.repository.support;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ import org.springframework.data.repository.core.RepositoryMetadata;
  */
 class PagingAndSortingRepositoryInvoker extends CrudRepositoryInvoker {
 
-	private final PagingAndSortingRepository<Object, Object> repository;
+	private final PagingAndSortingRepository<Object, Serializable> repository;
 	private final boolean customFindAll;
 
 	/**
@@ -45,7 +46,7 @@ class PagingAndSortingRepositoryInvoker extends CrudRepositoryInvoker {
 	 * @param metadata must not be {@literal null}.
 	 * @param conversionService must not be {@literal null}.
 	 */
-	public PagingAndSortingRepositoryInvoker(PagingAndSortingRepository<Object, Object> repository,
+	public PagingAndSortingRepositoryInvoker(PagingAndSortingRepository<Object, Serializable> repository,
 			RepositoryMetadata metadata, ConversionService conversionService) {
 
 		super(repository, metadata, conversionService);

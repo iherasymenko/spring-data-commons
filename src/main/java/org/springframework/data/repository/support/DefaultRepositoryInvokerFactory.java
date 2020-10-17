@@ -17,6 +17,7 @@ package org.springframework.data.repository.support;
 
 import static org.springframework.data.util.Optionals.*;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -99,10 +100,10 @@ public class DefaultRepositoryInvokerFactory implements RepositoryInvokerFactory
 	protected RepositoryInvoker createInvoker(RepositoryInformation information, Object repository) {
 
 		if (repository instanceof PagingAndSortingRepository) {
-			return new PagingAndSortingRepositoryInvoker((PagingAndSortingRepository<Object, Object>) repository, information,
+			return new PagingAndSortingRepositoryInvoker((PagingAndSortingRepository<Object, Serializable>) repository, information,
 					conversionService);
 		} else if (repository instanceof CrudRepository) {
-			return new CrudRepositoryInvoker((CrudRepository<Object, Object>) repository, information, conversionService);
+			return new CrudRepositoryInvoker((CrudRepository<Object, Serializable>) repository, information, conversionService);
 		} else {
 			return new ReflectionRepositoryInvoker(repository, information, conversionService);
 		}

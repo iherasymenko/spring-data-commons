@@ -15,16 +15,18 @@
  */
 package org.springframework.data.repository;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 /**
- * Interface for generic CRUD operations on a repository for a specific type.
+ * Interface for generic CRUD operations on a org.springframework.data.repository for a specific type.
  *
  * @author Oliver Gierke
  * @author Eberhard Wolff
  */
 @NoRepositoryBean
-public interface CrudRepository<T, ID> extends Repository<T, ID> {
+public interface CrudRepository<T, ID extends Serializable> extends Repository<T, ID> {
 
 	/**
 	 * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
@@ -118,7 +120,34 @@ public interface CrudRepository<T, ID> extends Repository<T, ID> {
 	void deleteAll(Iterable<? extends T> entities);
 
 	/**
-	 * Deletes all entities managed by the repository.
+	 * Deletes all entities managed by the org.springframework.data.repository.
 	 */
 	void deleteAll();
+
+	// MONKEY PATCH STARTS
+	default T findOne(ID id) {
+		return findById(id).orElse(null);
+	}
+
+	default void delete(ID id) {
+		deleteById(id);
+	}
+
+	default boolean exists(ID id) {
+		return existsById(id);
+	}
+
+	default List<T> findAll(Iterable<ID> ids) {
+		return (List<T>) findAllById(ids);
+	}
+
+	default <S extends T> List<S> save(Iterable<S> entities) {
+		return (List<S>) saveAll(entities);
+	}
+
+	default void delete(Iterable<? extends T> entities) {
+		deleteAll(entities);
+	}
+
+	// MONKEY PATCH ENDS
 }

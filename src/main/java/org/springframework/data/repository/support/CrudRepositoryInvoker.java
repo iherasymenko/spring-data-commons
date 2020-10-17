@@ -15,6 +15,7 @@
  */
 package org.springframework.data.repository.support;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ import org.springframework.data.repository.core.RepositoryMetadata;
  */
 class CrudRepositoryInvoker extends ReflectionRepositoryInvoker {
 
-	private final CrudRepository<Object, Object> repository;
+	private final CrudRepository<Object, Serializable> repository;
 
 	private final boolean customSaveMethod;
 	private final boolean customFindOneMethod;
@@ -50,8 +51,8 @@ class CrudRepositoryInvoker extends ReflectionRepositoryInvoker {
 	 * @param metadata must not be {@literal null}.
 	 * @param conversionService must not be {@literal null}.
 	 */
-	public CrudRepositoryInvoker(CrudRepository<Object, Object> repository, RepositoryMetadata metadata,
-			ConversionService conversionService) {
+	public CrudRepositoryInvoker(CrudRepository<Object, Serializable> repository, RepositoryMetadata metadata,
+								 ConversionService conversionService) {
 
 		super(repository, metadata, conversionService);
 
@@ -89,7 +90,7 @@ class CrudRepositoryInvoker extends ReflectionRepositoryInvoker {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> invokeFindById(Object id) {
-		return customFindOneMethod ? super.invokeFindById(id) : (Optional<T>) repository.findById(convertId(id));
+		return customFindOneMethod ? super.invokeFindById(id) : (Optional<T>) repository.findById((Serializable) convertId(id));
 	}
 
 	/*
@@ -111,7 +112,7 @@ class CrudRepositoryInvoker extends ReflectionRepositoryInvoker {
 		if (customDeleteMethod) {
 			super.invokeDeleteById(id);
 		} else {
-			repository.deleteById(convertId(id));
+			repository.deleteById((Serializable) convertId(id));
 		}
 	}
 

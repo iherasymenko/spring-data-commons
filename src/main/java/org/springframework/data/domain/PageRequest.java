@@ -31,6 +31,18 @@ public class PageRequest extends AbstractPageRequest {
 
 	private final Sort sort;
 
+	//MONKEY PATCH START
+
+	public PageRequest(int page, int size) {
+		this(page, size, Sort.unsorted());
+	}
+
+	public PageRequest(int page, int size, Direction direction, String... properties) {
+		this(page, size, Sort.by(direction, properties));
+	}
+
+	// MONKEY PATH END
+
 	/**
 	 * Creates a new {@link PageRequest} with sort parameters applied.
 	 *
@@ -38,7 +50,7 @@ public class PageRequest extends AbstractPageRequest {
 	 * @param size the size of the page to be returned, must be greater than 0.
 	 * @param sort must not be {@literal null}, use {@link Sort#unsorted()} instead.
 	 */
-	protected PageRequest(int page, int size, Sort sort) {
+	public PageRequest(int page, int size, Sort sort) {
 
 		super(page, size);
 

@@ -16,6 +16,7 @@
 	</parent>
 
 	<properties>
+		<maven.test.skip>true</maven.test.skip>
 		<javaslang>2.0.6</javaslang>
 		<vavr>0.10.3</vavr>
 		<scala>2.11.7</scala>
