@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Interface for generic CRUD operations on a org.springframework.data.repository for a specific type.
  *
@@ -125,6 +127,7 @@ public interface CrudRepository<T, ID extends Serializable> extends Repository<T
 	void deleteAll();
 
 	// MONKEY PATCH STARTS
+	@Nullable
 	default T findOne(ID id) {
 		return findById(id).orElse(null);
 	}
